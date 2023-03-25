@@ -51,7 +51,7 @@ const request = {
       args.url = baseURL + args.url;
     }
     // 请求头
-    args.header = HEADER 
+    args.header = HEADER
     if (store.state.token) {
       args.header.Authorization = `Bearer ${store.state.token}`
     }
@@ -65,15 +65,31 @@ export default (options) => {
   return new Promise((resolve, reject) => {
     // 封装自己的发送请求的代码 底层 还是使用 uni.request => 继续使用刚刚封装好的拦截器
     uni.request({
-
       ...options,
-
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           // 成功  resolve 把请求后的参数 返回
-          resolve(res.data);
+          if(typeof res.data === 'string'){
+            let response = JSON.parse(res.data)
+            console.log(3232,response);
+             if (response.code === 401) {
+            this.$store.commit("longout");
+            uni.showToast({
+              title: "token过期,请重新登录",
+              icon: "none",
+              duration: 2000,
+            });
+            setTimeout(() => {
+              uni.navigateTo({
+                url: "/pages/login/components/Mobile/index",
+              });
+            }, 2000);
+          }
+          }
+          
+         
+            resolve(res.data);
         } else {
-          // 失败
           reject(res);
         }
       },

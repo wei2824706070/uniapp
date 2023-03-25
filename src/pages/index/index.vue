@@ -24,14 +24,11 @@
       </swiper>
     </view>
     <view class="infoThree">
-      <text style="font-size: 28rpx; margin: 0 0 50rpx 0"
-        >尽量选择头部照片，效果更好哦</text
-      >
       <text class="custom-style" @click="ChooseImageFace()">选择图片</text>
     </view>
-    <view class="dateBox">
+    <!-- <view class="dateBox">
       <text style="font-size: 28rpx">{{ getday() }}更新了新特效</text>
-    </view>
+    </view> -->
     <!-- <u-popup
       :show="show"
       mode="bottom"
@@ -48,9 +45,8 @@
 </template>
 
 <script>
-import { getSwiperList, getTagsCategory } from "@/api/common";
+import { getSwiperList, getUpload, getPredict } from "@/api/common";
 import { formatTime } from "@/utils/util";
-
 export default {
   data() {
     return {
@@ -69,10 +65,9 @@ export default {
   methods: {
     async SwiperList() {
       const res = await getSwiperList();
-      
-      this.swiperList = res.rows.map(item=>{
-        
-        return 'https://ai.changqiu.cc'+ item.picUrl
+
+      this.swiperList = res.rows.map((item) => {
+        return "https://ai.changqiu.cc" + item.picUrl;
       });
       // console.log(111,res,this.swiperList);
     },
@@ -87,24 +82,54 @@ export default {
     //   this.show = false;
     //   // console.log('close');
     // },
+    isTokenExpired(token) {},
     ChooseImageFace() {
-      uni.chooseImage({
-        count: 1, //选择几张
-        sizeType: ["compressed"], //可以指定是原图还是压缩图，默认二者都有
-        sourceType: ["album", "camera"], //从相册选择(也可以拍照)
-        success: async (res) => {
-          this.faceSrc = res.tempFiles[0];
-          console.log(333,res);
+      // uni.chooseImage({
+      //   count: 1, //选择几张
+      //   sizeType: ["compressed"], //可以指定是原图还是压缩图，默认二者都有
+      //   sourceType: ["album", "camera"], //从相册选择(也可以拍照)
+      //   success: async (res) => {
+      //     this.faceSrc = res.tempFiles[0];
+      //     console.log(333,res);
 
-          // console.log(111, this.baseUrl)
-          uni.navigateTo({
-            url: `/pages/preview/index?url=${JSON.stringify(this.faceSrc)}`,
+      //     // console.log(111, this.baseUrl)
+      //     uni.navigateTo({
+      //       url: `/pages/preview/index?url=${JSON.stringify(this.faceSrc)}`,
+      //     });
+      //     // this.show = false;
+      //     // this.uploadFace(this.faceSrc);
+      //     // console.log(this.baseUrl);
+      //   },
+      // });
+
+      if (this.$store.state.token) {
+          uni.chooseImage({
+            count: 1, //默认9
+            sizeType: ["original", "compressed"],
+            sourceType: ["album", "camera"],
+            success: function (res) {
+              let imgUrl = res.tempFilePaths[0];
+              console.log(imgUrl);
+              uni.navigateTo({
+                url: `/pages/preview/index?url=${imgUrl}`,
+              });
+            },
           });
-          // this.show = false;
-          // this.uploadFace(this.faceSrc);
-          // console.log(this.baseUrl);
-        },
-      });
+      } else {
+        uni.showModal({
+          title: "提示",
+          content: "您还未登录，请先登录~",
+          confirmText: "去登录",
+          cancelText: "再逛会",
+          success: (res) => {
+            if (res.confirm) {
+              uni.navigateTo({
+                url: "/pages/login/components/Mobile/index",
+              });
+            }
+          },
+        });
+      }
     },
   },
 };
@@ -113,11 +138,11 @@ export default {
 <style scoped lang="scss">
 .preview-footer {
   width: 550rpx;
-  height: 550rpx;
+  height: 850rpx;
   border-radius: 40rpx;
   .swiper-item {
     width: 550rpx;
-    height: 550rpx;
+    height: 850rpx;
     border-radius: 40rpx;
   }
 }
@@ -151,7 +176,7 @@ export default {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin: 40rpx 0 0 0;
+    margin: 80rpx 0 0 0;
     .custom-style {
       text-align: center;
       width: 300rpx;
@@ -161,32 +186,6 @@ export default {
       border-radius: 10rpx;
       font-size: 32rpx;
     }
-  }
-  .dateBox {
-    margin-top: 60rpx;
-    padding: 20rpx 100rpx;
-    border: 1px dashed #bbbbbb;
-    margin: 80rpx 0 0 0;
-  }
-  .popup-view {
-    width: 100vw;
-    height: 200rpx;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #bfd0c5;
-  }
-  .popup-text {
-    padding: 5rpx 40rpx;
-    background: #3aa2ff;
-    color: #fff;
-    border-radius: 10rpx;
-  }
-  .popup-button {
-    padding: 5rpx 40rpx;
-    color: #fff;
-    border-radius: 10rpx;
-    background: #f78a8a;
   }
 }
 </style>

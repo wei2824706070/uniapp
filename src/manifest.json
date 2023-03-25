@@ -8,9 +8,9 @@
 	"app-plus": { /* 5+App特有相关 */
 		"usingComponents": true,
 		"splashscreen": {
-			"alwaysShowBeforeRender": true,
+			"alwaysShowBeforeRender": false,
 			"waiting": true,
-			"autoclose": true,
+			"autoclose": false,
 			"delay": 0
 		},
 		"modules": { /* 模块配置 */

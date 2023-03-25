@@ -34,7 +34,7 @@ export default {
 
   onLoad({ url }) {
     console.log(url);
-    this.imageUrl = "http://192.168.51.231:7860/file=" + url;
+    this.imageUrl = url;
     this.paintingUrl = url
   },
   methods: {

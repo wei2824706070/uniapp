@@ -1,36 +1,20 @@
 <template>
   <view class="preview">
     <view class="preview-swiper">
+      <image class="preview-image" :src="largeUrl" />
       <swiper class="preview-header" :display-multiple-items="itemsIndex">
         <swiper-item v-for="(item, index) in categoryList" :key="index">
-          <view class="swiper-item" @click="changeValue(index)">
-            <image
-              :src="item.url"
-              mode="aspectFill"
-              :class="{ active: value === index }"
-              style="width: 100rpx; height: 100rpx; border-radius: 10rpx"
-            />
-          </view>
-        </swiper-item>
-      </swiper>
-      <image class="preview-image" :src="largeUrl" />
-      <!-- <swiper
-        class="preview-footer"
-        :display-multiple-items="currentIndex"
-        :current="nextCurrent"
-        circular
-      >
-        <swiper-item v-for="(item, index) in tagsList" :key="index">
           <view class="swiper-item" @click="getTagslist(index)">
             <image
               :src="item.url"
               mode="aspectFill"
-              :class="{ active: current === index }"
-              style="width: 100rpx; height: 100rpx; border-radius: 50rpx"
+              :class="{ active: value === index }"
+              style="width: 130rpx; height: 130rpx; border-radius: 10rpx"
             />
+            <text>{{ item.name }}</text>
           </view>
         </swiper-item>
-      </swiper> -->
+      </swiper>
     </view>
 
     <view class="preview-button">
@@ -173,16 +157,18 @@ export default {
   },
 
   async onLoad({ url }) {
-    this.baseUrl = JSON.parse(url) ;
-    console.log(444,this.baseUrl);
-    this.getTagslist();
+    this.baseUrl = url;
+    console.log(444, this.baseUrl);
+    this.getTagsCategory();
   },
   methods: {
     async getTagslist(index = 0) {
-      const already = this.alreadyList.filter((item) => {
-        return item.value == this.value 
-      });
       this.value = index;
+      this.algoType = this.categoryList[index].label;
+      const already = this.alreadyList.filter((item) => {
+        return item.value == this.value;
+      });
+
       console.log(222, already);
       if (already.length > 0) {
         this.largeUrl = already[0].url;
@@ -195,52 +181,76 @@ export default {
       //   this.baseUrl = await pathToBase64(this.baseUrl);
       // }
       // this.baseShow = true;
-      const res = await getTagsCategory();
 
-      this.categoryList = res.data.map((item) => {
+      uni.uploadFile({
+        url: "/home/pic/generate", //仅为示例，非真实的接口地址
+        filePath: this.baseUrl,
+        name: "file",
+        formData: {
+          algoType: this.algoType,
+        },
+        success: async (uploadFileRes) => {
+          let res = JSON.parse(uploadFileRes.data);
+          console.log(11122, res, uploadFileRes);
+          if (res.code == 200) {
+            this.largeUrl = "https://ai.changqiu.cc" + res.data.image;
+            const obj = { value: this.value, url: this.largeUrl };
+            this.alreadyList.push(obj);
+            console.log(111, obj, this.alreadyList);
+          } else if (res.code == 401) {
+            this.$store.commit("longout");
+            uni.showToast({
+              title: "token过期,请重新登录",
+              icon: "none",
+              duration: 2000,
+            });
+            setTimeout(() => {
+              uni.navigateTo({
+                url: "/pages/login/components/Mobile/index",
+              });
+            }, 1200);
+          } else {
+            uni.showToast({
+              title: "图像中没找到人脸,请重新选择图片",
+              icon: "none",
+              duration: 4000,
+            });
+            setTimeout(() => {
+              this.ChooseImageFace();
+            }, 1500);
+          }
+        },
+      });
+    },
+    async getTagsCategory() {
+      const res = await getTagsCategory();
+      this.categoryList = res.data.map((item,index) => {
+        let list = ['日漫风','3D特效','手绘风','铅笔画','艺术特效']
         item.url = "https://ai.changqiu.cc" + item.url;
+        item.name = list[index]
         return item;
       });
       console.log(111, res, this.categoryList);
       this.algoType = this.categoryList[0].label;
-      if (this.categoryList.length > 3) {
-        this.itemsIndex = 3;
+      if (this.categoryList.length > 5) {
+        this.itemsIndex = 5;
       } else {
         this.itemsIndex = this.categoryList.length;
       }
-
       if (res.code == 200) {
-        const res = await getPredict({
-          algoType: this.algoType,
-          file: this.baseUrl,
-        });
-        console.log(555,res);
-        if (res.data[0][0]) {
-          this.largeUrl =
-            "http://192.168.51.231:7860/file=" +
-            res.data[0][0].name.replace(/\\/g, "/");
-          this.releaseUrl = res.data[0][0].name.replace(/\\/g, "/");
-          const obj = { value: this.value, index: index, url: this.largeUrl };
-          this.alreadyList.push(obj);
-          console.log(111, obj, this.alreadyList);
-        }
+        this.getTagslist();
       }
     },
-    changeValue(index) {
-      this.value = index;
-      this.algoType = this.categoryList[index].label;
-      this.current = "";
-    },
+
     ChooseImageFace() {
       uni.chooseImage({
         count: 1, //选择几张
         sizeType: ["compressed"], //可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], //从相册选择（也可以拍照
         success: async (res) => {
-          this.faceSrc = res.tempFiles;
-          console.log(111, this.faceSrc[0]);
+          this.faceSrc = res.tempFilePaths[0];
+          console.log(111, this.faceSrc);
           this.baseUrl = this.faceSrc;
-          this.baseShow = false;
           this.alreadyList = [];
           await this.getTagslist();
         },
@@ -299,9 +309,8 @@ export default {
       });
     },
     goSquareRelease() {
-      console.log(this.releaseUrl);
       uni.navigateTo({
-        url: `/pages/squareRelease/index?url=${this.releaseUrl}`,
+        url: `/pages/squareRelease/index?url=${this.largeUrl}`,
       });
     },
   },
@@ -330,11 +339,11 @@ export default {
     width: 650rpx;
     height: 600rpx;
     border-radius: 5px;
-    padding-bottom: 70rpx;
+    padding: 70rpx 0;
   }
   .preview-header {
-    width: 500rpx;
-    height: 100rpx;
+    width: 100%;
+    height: 200rpx;
     text-align: center;
     margin-bottom: 50rpx;
   }
@@ -370,6 +379,7 @@ export default {
     }
   }
 }
+
 .swiper-item {
   transform: scale(0.8);
 }

@@ -4,7 +4,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({//全局变量定义
   state: {
     username: uni.getStorageSync('username') || '',
-    token: uni.getStorageSync('uniapp-token') || ''
+    token: uni.getStorageSync('uniapp-token') || '',
   },
   mutations: {
     setUsername(state, payload) {

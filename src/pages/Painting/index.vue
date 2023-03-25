@@ -97,9 +97,12 @@ export default {
     getDraftList() {
       const res = uni.getStorageSync("pathNum");
       console.log(111, res);
+      if(res){
       this.current = res.current;
-      this.imageUrl = "http://192.168.51.231:7860/file=" + res.url;
+      this.imageUrl = res.url;
       this.draftList.unshift(this.imageUrl);
+      }
+     
     },
   },
 };

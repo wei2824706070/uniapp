@@ -5,6 +5,7 @@
   "pages": [
      {
       "path": "pages/index/index"
+      
     },
     {
       "path": "pages/Painting/draftDetails",
@@ -20,11 +21,9 @@
     {
       "path": "pages/login/components/Mobile/index",
       "style": {
-        "navigationBarTitleText": "登录",
-        "app-plus": {
-          "titleView": false
-        }
-      }
+				"navigationBarTitleText": "登录"
+			
+			}
     },
   
     {
