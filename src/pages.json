@@ -1,0 +1,139 @@
+{
+  "easycom": {
+    "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+  },
+  "pages": [
+     {
+      "path": "pages/index/index"
+    },
+    {
+      "path": "pages/Painting/draftDetails",
+      "style": {
+        "navigationBarTitleText": "草稿详情"
+      }
+    },
+    
+     {
+      "path": "pages/preview/index"
+    },
+   
+    {
+      "path": "pages/login/components/Mobile/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "app-plus": {
+          "titleView": false
+        }
+      }
+    },
+  
+    {
+      "path": "pages/login/components/register/index",
+      "style": {
+        "navigationBarTitleText": "新用户注册"
+      }
+    },
+    {
+      "path": "pages/squareDetails/index",
+      "style": {
+        "navigationBarTitleText": "广场详情"
+      }
+    },
+    {
+      "path": "pages/works/index",
+      "style": {
+        "navigationBarTitleText": "作品详情"
+      }
+    },
+    {
+      "path": "pages/my/components/personalSet/index",
+      "style": {
+        "navigationBarTitleText": "个人设置"
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/my/components/changePassword/index",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    {
+      "path": "pages/Painting/index",
+      "style": {
+        "navigationBarTitleText": "画集"
+      }
+    },
+   
+    {
+      "path": "pages/squareRelease/index",
+      "style": {
+        "navigationBarTitleText": "发布"
+      }
+    },
+    {
+      "path": "pages/square/index",
+      "style": {
+        "navigationBarTitleText": "广场"
+      }
+    },
+    {
+      "path": "pages/loading/index"
+    },
+    {
+      "path": "pages/login/index"
+    },
+    {
+      "path": "pages/advertisement/index"
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "AI动漫换脸",
+    "navigationBarBackgroundColor": "#adc2b5",
+    "backgroundColor": "#adc2b5"
+  },
+  "tabBar": {
+    "color": "#333",
+    "selectedColor": "#adc2b5",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "换脸",
+        "iconPath": "/static/image/home.png",
+        "selectedIconPath": "/static/image/home_fill.png"
+      },
+      {
+        "pagePath": "pages/square/index",
+        "text": "广场",
+        "iconPath": "/static/image/square.png",
+        "selectedIconPath": "/static/image/square_fill.png"
+      },
+      {
+        "pagePath": "pages/Painting/index",
+        "text": "画集",
+        "iconPath": "/static/image/plane.png",
+        "selectedIconPath": "/static/image/plane_fill.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "/static/image/user.png",
+        "selectedIconPath": "/static/image/user_fill.png"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#adc2b5",
+    "navigationBarTitleText": "AI动漫换脸",
+    "navigationBarTextStyle": "#f0f5f2;"
+  }
+}
