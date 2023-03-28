@@ -131,9 +131,12 @@ export default {
           icon: "none",
         });
       if(res.code == 200){
+        uni.setStorageSync('username-password',{username:this.formData.username,password:this.formData.password})
         uni.navigateTo({
-           url: `/pages/login/components/Mobile/index?username=${this.formData.username}&password=${this.formData.password}`
+           url: `/pages/login/components/Mobile/index`
         });
+      }else{
+        this.getCaptchaImage()
       }
     },
 

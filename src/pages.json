@@ -3,10 +3,14 @@
     "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
   },
   "pages": [
-     {
+      {
       "path": "pages/index/index"
       
     },
+      {
+      "path": "pages/preview/index"
+    },
+  
     {
       "path": "pages/Painting/draftDetails",
       "style": {
@@ -14,9 +18,6 @@
       }
     },
     
-     {
-      "path": "pages/preview/index"
-    },
    
     {
       "path": "pages/login/components/Mobile/index",
@@ -98,34 +99,34 @@
     "backgroundColor": "#adc2b5"
   },
   "tabBar": {
-    "color": "#333",
-    "selectedColor": "#adc2b5",
+    "color": "#adc2b5",
+    "selectedColor": "#333",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "换脸",
-        "iconPath": "/static/image/home.png",
-        "selectedIconPath": "/static/image/home_fill.png"
+        "iconPath": "/static/image/home_fill.png",
+        "selectedIconPath": "/static/image/home.png"
       },
       {
         "pagePath": "pages/square/index",
         "text": "广场",
-        "iconPath": "/static/image/square.png",
-        "selectedIconPath": "/static/image/square_fill.png"
+        "iconPath": "/static/image/square_fill.png",
+        "selectedIconPath": "/static/image/square.png"
       },
       {
         "pagePath": "pages/Painting/index",
         "text": "画集",
-        "iconPath": "/static/image/plane.png",
-        "selectedIconPath": "/static/image/plane_fill.png"
+        "iconPath": "/static/image/plane_fill.png",
+        "selectedIconPath": "/static/image/plane.png"
       },
       {
         "pagePath": "pages/my/my",
         "text": "我的",
-        "iconPath": "/static/image/user.png",
-        "selectedIconPath": "/static/image/user_fill.png"
+        "iconPath": "/static/image/user_fill.png",
+        "selectedIconPath": "/static/image/user.png"
       }
     ]
   },

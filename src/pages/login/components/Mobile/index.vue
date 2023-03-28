@@ -89,8 +89,8 @@ export default {
       isAuthorization: true,
       url: "",
       formData: {
-        username: "a2323",
-        password: "123456",
+        username: "",
+        password: "",
         code: "",
         uuid: "",
       },
@@ -98,8 +98,9 @@ export default {
       value: true,
     }; 
   },
-  onLoad(res) {
-    if(res.length){
+  onLoad() {
+   let res = uni.getStorageSync('username-password')
+    if(res){
        this.formData.username = res.username;
        this.formData.password = res.password;
        console.log(res);

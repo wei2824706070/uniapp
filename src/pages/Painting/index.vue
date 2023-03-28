@@ -97,7 +97,7 @@ export default {
     getDraftList() {
       const res = uni.getStorageSync("pathNum");
       console.log(111, res);
-      if(res){
+      if(res.url){
       this.current = res.current;
       this.imageUrl = res.url;
       this.draftList.unshift(this.imageUrl);

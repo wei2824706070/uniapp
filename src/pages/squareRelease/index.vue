@@ -22,7 +22,7 @@
   </view>
 </template>
 <script>
-import { getSwiperList } from "../../api/common";
+import { getSwiperList } from "@/api/common";
 export default {
   data() {
     return {
