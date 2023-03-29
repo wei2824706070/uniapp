@@ -51,7 +51,9 @@ const request = {
       args.url = baseURL + args.url;
     }
     // 请求头
-    args.header = HEADER
+    // args.header = { ...args.header, HEADER }
+    args.header = { ...args.header }
+
     if (store.state.token) {
       args.header.Authorization = `Bearer ${store.state.token}`
     }
@@ -69,26 +71,26 @@ export default (options) => {
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           // 成功  resolve 把请求后的参数 返回
-          if(typeof res.data === 'string'){
+          if (typeof res.data === 'string') {
             let response = JSON.parse(res.data)
-            console.log(3232,response);
-             if (response.code === 401) {
-            this.$store.commit("longout");
-            uni.showToast({
-              title: "token过期,请重新登录",
-              icon: "none",
-              duration: 2000,
-            });
-            setTimeout(() => {
-              uni.navigateTo({
-                url: "/pages/login/components/Mobile/index",
+            console.log(3232, response);
+            if (response.code === 401) {
+              this.$store.commit("longout");
+              uni.showToast({
+                title: "token过期,请重新登录",
+                icon: "none",
+                duration: 2000,
               });
-            }, 2000);
+              setTimeout(() => {
+                uni.navigateTo({
+                  url: "/pages/login/components/Mobile/index",
+                });
+              }, 2000);
+            }
           }
-          }
-          
-         
-            resolve(res.data);
+
+
+          resolve(res.data);
         } else {
           reject(res);
         }

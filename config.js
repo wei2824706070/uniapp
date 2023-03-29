@@ -5,7 +5,7 @@ module.exports = {
   HTTP_REQUEST_URL:'https://ai.changqiu.cc',// 以下配置非开发者，无需修改
   // 请求头
   HEADER:{
-    'content-type': 'application/json'
+    'content-type': 'application/x-www-form-urlencoded'
   },
   // 回话密钥名称 
   TOKENNAME: 'Authori-zation',

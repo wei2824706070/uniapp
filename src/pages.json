@@ -3,10 +3,14 @@
     "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
   },
   "pages": [
-      {
+       {
       "path": "pages/index/index"
       
     },
+    {
+      "path": "pages/login/index"
+    },
+    
       {
       "path": "pages/preview/index"
     },
@@ -85,9 +89,7 @@
     {
       "path": "pages/loading/index"
     },
-    {
-      "path": "pages/login/index"
-    },
+   
     {
       "path": "pages/advertisement/index"
     }

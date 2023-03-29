@@ -104,7 +104,7 @@ export default {
     },
     gologin() {
       uni.navigateTo({
-        url: "/pages/login/components/Mobile/index",
+        url: "/pages/login/index",
       });
     },
     goPersonalSet() {

@@ -1,38 +1,37 @@
 <template>
   <view class="login">
-    
     <view class="logo">
-     
-      <uni-nav-bar dark :fixed="true" shadow background-color="#007AFF" status-bar left-icon="left" left-text="返回"
-			title="自定义导航栏" @clickLeft="back" />
       <image
         class="logo-image"
         src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7"
       />
       <view> 欢迎登录 </view>
       <view class="login-button">
-        <text class="text-weixin">微信一键登录</text>
-        
-        <text class="text-phone" @click="goMobile">手机号码登录</text>
-      </view>
-    </view>
+        <text class="text-weixin" @click="wxLogin">微信一键登录</text>
 
-    <view class="login-agree">
-      <u-checkbox-group v-model="value">
-        <u-checkbox
-          activeColor="green"
-          label="登录代表您已同意《意间AI服务条款》"
-        ></u-checkbox>
-      </u-checkbox-group>
+        <text class="text-phone" @click="goMobile">账号登录</text>
+      </view>
+      <view class="logo_xieyi">
+        <checkbox-group @change="changeValue">
+          <checkbox style="transform: scale(0.7)" :checked="value" />
+        </checkbox-group>
+        <view class="logo_text"
+          >请勾选并阅读 <text>《注册协议》</text>及
+          <text>《隐私协议》</text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
 <script>
+import { wxLogin } from "@/api/user";
 export default {
   data() {
     return {
-      value: "",
+      value: true,
       clearInterval: "",
+      signature: "",
+      rawData: {},
     };
   },
 
@@ -41,27 +40,83 @@ export default {
     changeRadio(item) {
       console.log(item);
     },
-    goMobile(){
+    goMobile() {
       uni.navigateTo({
-					url: '/pages/login/components/Mobile/index'
-				})
+        url: "/pages/login/components/Mobile/index",
+      });
       // uni.switchTab({url:'/pages/login/components/Mobile/index'})
     },
-    leftClick(){
-
-    }
+    changeValue() {
+      this.value = !this.value;
+    },
+    wxLogin() {
+      uni.login({
+        provider: "weixin",
+        onlyAuthorize: true, // 微信登录仅请求授权认证
+        success: function (event) {
+          const { code } = event;
+          console.log(event);
+          uni.getUserInfo({
+            async success(res) {
+              console.log(111, res);
+              const avatarUrl = encodeURIComponent(res.userInfo.avatarUrl);
+              // var FormData = require("form-data");
+              // var data = new FormData();
+              // data.append("code", "123");
+              // data.append("rawData", {avatarUrl:avatarUrl,nickName:res.userInfo.nickName});
+              // data.append("signature", res.signature);
+              // const response = await wxLogin({
+              //   code: code,
+              //   signature: res.signature,
+              //   rawData: {
+              //     avatarUrl: avatarUrl,
+              //     nickName: res.userInfo.nickName,
+              //   },
+              // });
+              // console.log(333, response);
+              // var request = require('request');
+              uni.request({
+                url: "/system/user/wxLogin",
+                method: "POST",
+                header: {
+                  "content-type": "application/x-www-form-urlencoded",
+                },
+                data: {
+                  code: code,
+                  signature: res.signature,
+                  rawData: `{avatarUrl: '${avatarUrl}',nickName: '${res.userInfo.nickName}'}`,
+                },
+                success(res){
+                  console.log(res);
+                }
+              });
+            },
+            fail(err) {
+              console.log(err);
+            },
+          });
+          //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+        },
+        fail: function (err) {
+          // 登录授权失败
+          // err.code是错误码
+          console.log(err);
+        },
+      });
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .login {
-  height: 100vh;
+  height: 90vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+  // align-items: center;
   // margin-top: 40rpx;
-  padding:40rpx;
+  padding: 40rpx;
   // background: #000;
   .login-button {
     flex: 1;
@@ -94,19 +149,25 @@ export default {
       background: #cd76eb;
     }
   }
-  .login-agree {
-    // display: flex;
-    color: #fff;
-    flex: 1;
-    margin-top: 40rpx;
-    // .login-text {
-    // }
+  .logo_xieyi {
+    width: 100%;
+    height: 80rpx;
+    line-height: 50rpx;
+    display: flex;
+    margin-top: 50rpx;
+    align-items: center;
+    color: #444;
+    font-size: 28rpx;
+
+    .logo_text text {
+      color: #ff3b00;
+    }
   }
   .logo {
     margin-top: 40rpx;
     display: flex;
     align-items: center;
-    justify-content: center;
+    // justify-content: center;
     flex-direction: column;
     // color: #fff;
     font-size: 36rpx;

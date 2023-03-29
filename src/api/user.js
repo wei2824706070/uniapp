@@ -31,3 +31,10 @@ export const getLogout = (data) => {
     data
   })
 }
+export const wxLogin = (data) => {
+  return request({
+    url:  '/system/user/wxLogin',
+    method: 'post',
+    data
+  })
+}
