@@ -38,3 +38,22 @@ export const wxLogin = (data) => {
     data
   })
 }
+export const getWxUserInfo = () => {
+  return request({
+    url:  '/system/user/getWxUserInfo',
+    method: 'get',
+  })
+}
+export const getSignIn = () => {
+  return request({
+    url:  '/system/user/signIn',
+    method: 'get',
+  })
+}
+export const getWxOauth2Login = (data) => {
+  return request({
+    url:  '/system/user/wxOauth2Login',
+    method: 'post',
+    data
+  })
+}

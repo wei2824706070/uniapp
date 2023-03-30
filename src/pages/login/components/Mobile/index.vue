@@ -160,7 +160,7 @@ export default {
           icon: "none",
         });
       if(res.code == 200){
-        this.$store.commit('setUsername',this.formData.username)
+        // this.$store.commit('setUsername',this.formData.username)
       this.$store.commit('setToken',res.token)
         uni.switchTab({
            url: `/pages/index/index`

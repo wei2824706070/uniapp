@@ -41,7 +41,7 @@ export default {
           icon: "none",
         });
        uni.navigateTo({
-        url: "/pages/login/components/Mobile/index",
+        url: "/pages/login/index",
       });
    }
    console.log(res);

@@ -3,14 +3,21 @@
     "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
   },
   "pages": [
-       {
+     {
+      "path": "pages/login/index"
+    },
+     {
       "path": "pages/index/index"
       
     },
-    {
-      "path": "pages/login/index"
+   
+     {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
     },
-    
+     
       {
       "path": "pages/preview/index"
     },
@@ -55,12 +62,7 @@
         "navigationBarTitleText": "个人设置"
       }
     },
-    {
-      "path": "pages/my/my",
-      "style": {
-        "navigationBarTitleText": "我的"
-      }
-    },
+   
     {
       "path": "pages/my/components/changePassword/index",
       "style": {
@@ -112,18 +114,7 @@
         "iconPath": "/static/image/home_fill.png",
         "selectedIconPath": "/static/image/home.png"
       },
-      {
-        "pagePath": "pages/square/index",
-        "text": "广场",
-        "iconPath": "/static/image/square_fill.png",
-        "selectedIconPath": "/static/image/square.png"
-      },
-      {
-        "pagePath": "pages/Painting/index",
-        "text": "画集",
-        "iconPath": "/static/image/plane_fill.png",
-        "selectedIconPath": "/static/image/plane.png"
-      },
+     
       {
         "pagePath": "pages/my/my",
         "text": "我的",

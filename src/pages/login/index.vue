@@ -7,7 +7,13 @@
       />
       <view> 欢迎登录 </view>
       <view class="login-button">
-        <text class="text-weixin" @click="wxLogin">微信一键登录</text>
+        <button
+          class="text-weixin"
+          open-type="getPhoneNumber"
+          @getphonenumber="decryptPhoneNumber"
+        >
+          微信一键登录
+        </button>
 
         <text class="text-phone" @click="goMobile">账号登录</text>
       </view>
@@ -24,7 +30,7 @@
   </view>
 </template>
 <script>
-import { wxLogin } from "@/api/user";
+import { getWxOauth2Login } from "@/api/user";
 export default {
   data() {
     return {
@@ -49,60 +55,89 @@ export default {
     changeValue() {
       this.value = !this.value;
     },
+    async decryptPhoneNumber(e) {
+      console.log(e);
+      //  const res = await getWxOauth2Login({code: e.detail.code,})
+      //  console.log(res);
+      // uni.request({
+      //             url: `/system/user/wxOauth2Login`,
+      //             method: "post",
+      //             header: {
+      //               "content-type": "application/x-www-form-urlencoded",
+      //             },
+      //             data:{
+      //               code: e.detail.code
+      //             },
+      //             success(res) {
+      //               console.log(111,res);
+
+      //             },
+      //           });
+    },
     wxLogin() {
-      uni.login({
-        provider: "weixin",
-        onlyAuthorize: true, // 微信登录仅请求授权认证
-        success: function (event) {
-          const { code } = event;
-          console.log(event);
-          uni.getUserInfo({
-            async success(res) {
-              console.log(111, res);
-              const avatarUrl = encodeURIComponent(res.userInfo.avatarUrl);
-              // var FormData = require("form-data");
-              // var data = new FormData();
-              // data.append("code", "123");
-              // data.append("rawData", {avatarUrl:avatarUrl,nickName:res.userInfo.nickName});
-              // data.append("signature", res.signature);
-              // const response = await wxLogin({
-              //   code: code,
-              //   signature: res.signature,
-              //   rawData: {
-              //     avatarUrl: avatarUrl,
-              //     nickName: res.userInfo.nickName,
-              //   },
-              // });
-              // console.log(333, response);
-              // var request = require('request');
-              uni.request({
-                url: "/system/user/wxLogin",
-                method: "POST",
-                header: {
-                  "content-type": "application/x-www-form-urlencoded",
-                },
-                data: {
-                  code: code,
-                  signature: res.signature,
-                  rawData: `{avatarUrl: '${avatarUrl}',nickName: '${res.userInfo.nickName}'}`,
-                },
-                success(res){
-                  console.log(res);
-                }
-              });
-            },
-            fail(err) {
-              console.log(err);
-            },
-          });
-          //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
-        },
-        fail: function (err) {
-          // 登录授权失败
-          // err.code是错误码
-          console.log(err);
-        },
-      });
+      // wx.getUserInfo({
+      //   desc: "用于完善会员资料",
+      //   success: (res) => {
+      //     const userInfo = res.userInfo;
+      //     console.log(userInfo);
+      //   },
+      //   fail: (err) => {
+      //     console.log(err);
+      //   },
+      // });
+      // wx.authorize({
+      //   scope: "scope.userInfo",
+      //   success: () => {
+      //     console.log("用户已授权");
+      //   },
+      //   fail: () => {
+      //     console.log("用户未授权");
+      //   },
+      // });
+      //  uni.login({
+      //     provider: "weixin",
+      //     onlyAuthorize: true, // 微信登录仅请求授权认证
+      //     success: function (event) {
+      //       const { code } = event;
+      //       console.log(event);
+      //       uni.getUserInfo({
+      //         async success(res) {
+      //           console.log(111, res);
+      //           const avatarUrl = encodeURIComponent(res.userInfo.avatarUrl);
+      // uni.request({
+      //   url: "/system/user/wxLogin",
+      //   method: "POST",
+      //   header: {
+      //     "content-type": "application/x-www-form-urlencoded",
+      //   },
+      //   data: {
+      //     code: code,
+      //     signature: res.signature,
+      //     rawData: `{avatarUrl: '${avatarUrl}',nickName: '${res.userInfo.nickName}'}`,
+      //   },
+      //   success(res) {
+      //     console.log(res);
+      //     if (res.data.code == 200) {
+      //       store.commit("setToken", res.data.data);
+      //       uni.switchTab({
+      //         url: `/pages/index/index`,
+      //       });
+      //     }
+      //   },
+      // });
+      //         },
+      //         fail(err) {
+      //           console.log(err);
+      //         },
+      //       });
+      //       //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+      //     },
+      //     fail: function (err) {
+      //       // 登录授权失败
+      //       // err.code是错误码
+      //       console.log(err);
+      //     },
+      //   });
     },
   },
 };

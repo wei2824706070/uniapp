@@ -1,10 +1,8 @@
 <template>
   <view class="preview">
     <view class="preview-swiper">
-
       <image class="preview-image" :src="largeUrl" mode="aspectFill" />
-  
-      
+
       <swiper class="preview-header" :display-multiple-items="itemsIndex">
         <swiper-item v-for="(item, index) in categoryList" :key="index">
           <view class="swiper-item" @click="getTagslist(index)">
@@ -25,7 +23,7 @@
         <button class="release-text" @click="ChooseImageFace">更改照片</button>
         <button class="release-text" @click="handledownload">保存到相册</button>
       </view>
-      <view class="release-button" style="margin-bottom: 100rpx">
+      <!-- <view class="release-button" style="margin-bottom: 100rpx">
         <button class="release-text" @click="goSquareRelease">
           分享到广场
         </button>
@@ -33,7 +31,7 @@
         <button class="release-text" open-type="share" @click="handleShare">
           分享到微信
         </button>
-      </view>
+      </view> -->
     </view>
   </view>
 </template>
@@ -226,8 +224,10 @@ export default {
 
 <style scoped lang="scss">
 .preview {
+  height: 95vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background: #ffffff;
   margin: 5px;
   border-radius: 5px;
@@ -237,23 +237,24 @@ export default {
     flex-direction: column;
     align-items: center;
     position: relative;
+    .preview-image {
+      width: 650rpx;
+      // height: 600rpx;
+      border-radius: 5px;
+      padding: 70rpx 0;
+    }
+    .preview-header {
+      width: 100%;
+      height: 200rpx;
+      text-align: center;
+      margin-bottom: 50rpx;
+    }
   }
   .u-demo-block {
     width: 100rpx;
     height: 100rpx;
   }
-  .preview-image {
-    width: 650rpx;
-    // height: 600rpx;
-    border-radius: 5px;
-    padding: 70rpx 0;
-  }
-  .preview-header {
-    width: 100%;
-    height: 200rpx;
-    text-align: center;
-    margin-bottom: 50rpx;
-  }
+
   .preview-footer {
     width: 450rpx;
     height: 130rpx;

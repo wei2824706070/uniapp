@@ -7,7 +7,7 @@
       </view>
       <view v-else class="my-yh">
         <text> {{ username }} </text>
-        <view> 积分:132 </view>
+        <view> 积分:{{ integral }} </view>
       </view>
       <view v-if="!showlogin" class="my-center" @click="goPersonalSet">
         <u-icon
@@ -27,7 +27,10 @@
             <text> 5积分/次 </text>
           </view>
         </view>
-        <view class="footer-button">已签到 </view>
+        <view class="footer-button" v-show="!showSignIn">已签到 </view>
+        <view class="footer-button" v-show="showSignIn" @click="getSignIn"
+          >未签到
+        </view>
       </view>
       <view class="my-footer">
         <view>
@@ -49,55 +52,50 @@
         </view>
         <view class="footer-button">去邀请 </view>
       </view>
-      <view class="my-footer">
-        <view>
-          <view>发布的作品通过审核</view>
-          <view class="footer-icon">
-            <i class="iconfont">&#xe658;</i>
-            <text> 5积分/次 </text>
-          </view>
-        </view>
-        <view class="footer-button" @click="goPainting">去发布 </view>
-      </view>
-      <view class="my-footer">
-        <view>
-          <view>关注官方公众号</view>
-          <view class="footer-icon">
-            <i class="iconfont">&#xe658;</i>
-            <text> 每日可免费获取精彩关键词 </text>
-          </view>
-        </view>
-        <view class="footer-button">去关注 </view>
-      </view>
     </view>
   </view>
 </template>
 <script>
 import { formatTime } from "@/utils/util";
+import { getWxUserInfo, getSignIn } from "@/api/user";
 import { mapState } from "vuex";
 export default {
   data() {
     return {
-      value: "",
+      username: "",
       showlogin: true,
+      integral: "",
+      showSignIn: false,
       avater:
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7",
     };
   },
-
-  onLoad() {
-    this.judgeToken()
+  onShow() {
+    this.getWxUserInfo()
   },
-  computed: {
-    ...mapState(["username"]),
+  onLoad() {
+    this.getWxUserInfo();
   },
   methods: {
-    judgeToken(){
-      if (uni.getStorageSync('username')) {
-      this.showlogin = false;
-    }else{
-      this.showlogin = true;
-    }
+    async getWxUserInfo() {
+      const res = await getWxUserInfo();
+      console.log(res);
+      if (res.code == 200) {
+        this.showlogin = false;
+        this.avater = decodeURIComponent(res.data.avatar);
+        this.username = res.data.nickName;
+        this.integral = res.data.integral;
+        if (res.data.signIn == 0) {
+          this.showSignIn = true;
+        }
+        if (res.data.signIn == 1) {
+          this.showSignIn = false;
+        }
+      }
+    },
+    async getSignIn() {
+      const res = await getSignIn();
+      console.log(res);
     },
     getDay() {
       return formatTime(new Date());
@@ -158,7 +156,7 @@ export default {
     background: #fff;
     padding: 40rpx;
     border-radius: 10rpx;
-    padding-bottom: 200rpx;
+    padding-bottom: 600rpx;
   }
   .my-footer {
     display: flex;
