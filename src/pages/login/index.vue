@@ -54,7 +54,7 @@ export default {
     },
     changeValue() {
       this.value = !this.value;
-    }, 
+    },  
     async decryptPhoneNumber(e) {
       console.log(e);
       //  const res = await getWxOauth2Login({code: e.detail.code,})
