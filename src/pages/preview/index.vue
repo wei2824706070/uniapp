@@ -23,15 +23,6 @@
         <button class="release-text" @click="ChooseImageFace">更改照片</button>
         <button class="release-text" @click="handledownload">保存到相册</button>
       </view>
-      <!-- <view class="release-button" style="margin-bottom: 100rpx">
-        <button class="release-text" @click="goSquareRelease">
-          分享到广场
-        </button>
-
-        <button class="release-text" open-type="share" @click="handleShare">
-          分享到微信
-        </button>
-      </view> -->
     </view>
   </view>
 </template>
@@ -114,7 +105,7 @@ export default {
             });
             setTimeout(() => {
               uni.navigateTo({
-                url: "/pages/login/components/Mobile/index",
+                url: "/pages/login/index",
               });
             }, 1200);
           } else {
@@ -213,18 +204,13 @@ export default {
       //   },
       // });
     },
-    goSquareRelease() {
-      uni.navigateTo({
-        url: `/pages/squareRelease/index?url=${this.largeUrl}`,
-      });
-    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .preview {
-  height: 95vh;
+  height: 98vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -274,9 +260,9 @@ export default {
       margin-bottom: 50rpx;
       .release-text {
         text-align: center;
-        line-height: 75rpx;
-        width: 230rpx;
-        height: 75rpx;
+        line-height: 90rpx;
+        width: 300rpx;
+        height: 90rpx;
         border: 0;
         border-radius: 10rpx;
         font-size: 30rpx;

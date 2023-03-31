@@ -2,12 +2,12 @@
   <view class="changePassword">
     <text> 修改密码 </text>
     <view class="changePassword-input">
+      <input class="change-input" type="text" placeholder="密码" />
+      <input class="change-input" type="text" placeholder="确认密码" />
       <view class="changePassword-code">
         <input type="text" placeholder="验证码" />
         <text> 获取验证码 </text>
       </view>
-      <input class="change-input" type="text" placeholder="密码" />
-      <input class="change-input" type="text" placeholder="确认密码" />
     </view>
 
     <view>
@@ -38,8 +38,10 @@ export default {
     width: 90vw;
     .changePassword-code {
       display: flex;
+      margin-top: 10rpx;
       justify-content: space-between;
-      height: 80rpx;
+      align-items: center;
+      height: 90rpx;
       border-bottom: 1px solid #e6e6e6;
       color:#fb5ee5 ;
     }

@@ -127,11 +127,12 @@ export default {
       });
     },
     async handleLogin() {
-      if (this.value == false) {
+      if (!this.value) {
         uni.showToast({
           title: "请阅读并勾选用户协议",
           icon: "none",
         });
+        return
       }
       if (!this.formData.username) {
         uni.showToast({

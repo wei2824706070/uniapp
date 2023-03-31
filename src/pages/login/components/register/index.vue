@@ -93,18 +93,19 @@ export default {
     },
 
    async handleRegister() {
-      if (this.value == false) {
+      if (!this.value) {
         uni.showToast({
           title: "请阅读并勾选用户协议",
           icon: "none",
         });
+        return
       }
       if (!this.formData.username) {
         uni.showToast({
           title: "请输入用户名",
           icon: "none",
         });
-        
+        return
       }
       //  else if (this.formData.username.length < 6 || this.formData.username.length > 10) {
       //   uni.showToast({
@@ -117,12 +118,14 @@ export default {
           title: "请输入密码",
           icon: "none",
         });
+        return
       }
       else if (this.formData.password!=this.formData.confirmPassword) {
         uni.showToast({
           title: "两次密码要相同",
           icon: "none",
         });
+        return
       }
       const res = await getRegister(this.formData)
       console.log(res);

@@ -27,8 +27,8 @@
             <text> 5积分/次 </text>
           </view>
         </view>
-        <view class="footer-button" v-show="!showSignIn">已签到 </view>
-        <view class="footer-button" v-show="showSignIn" @click="getSignIn"
+        <view class="footer-button" v-show="showSignIn">已签到 </view>
+        <view class="footer-button" v-show="!showSignIn" @click="getSignIn"
           >未签到
         </view>
       </view>
@@ -53,6 +53,14 @@
         <view class="footer-button">去邀请 </view>
       </view>
     </view>
+    <!-- <u-modal
+      :show="show"
+      @confirm="confirm"
+      title="您还未登录,请先登录"
+      showCancelButton
+      @cancel="cancel"
+    >
+    </u-modal> -->
   </view>
 </template>
 <script>
@@ -66,39 +74,54 @@ export default {
       showlogin: true,
       integral: "",
       showSignIn: false,
+      show: false,
       avater:
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7",
     };
   },
   onShow() {
-    this.getWxUserInfo()
-  },
-  onLoad() {
     this.getWxUserInfo();
+    
+  },
+  onHide(){
+    this.show = false
   },
   methods: {
     async getWxUserInfo() {
       const res = await getWxUserInfo();
-      console.log(res);
+      console.log(3232, res);
       if (res.code == 200) {
         this.showlogin = false;
-        this.avater = decodeURIComponent(res.data.avatar);
+        this.avater = "https://ai.changqiu.cc" + res.data.avatar;
         this.username = res.data.nickName;
         this.integral = res.data.integral;
         if (res.data.signIn == 0) {
-          this.showSignIn = true;
-        }
-        if (res.data.signIn == 1) {
           this.showSignIn = false;
         }
+        if (res.data.signIn == 1) {
+          this.showSignIn = true;
+        }
+      }
+      if (res.code == 401) {
+        this.showSignIn = false;
+        this.showlogin = true;
+        this.avater =
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7";
       }
     },
     async getSignIn() {
       const res = await getSignIn();
       console.log(res);
-    },
-    getDay() {
-      return formatTime(new Date());
+      if (res.msg == '签到成功') {
+        this.getWxUserInfo();
+      }
+     else {
+        // this.show = true
+        uni.showToast({
+            title: '你还未登录，请先登录',
+            icon:'none',
+          });
+      }
     },
     gologin() {
       uni.navigateTo({
@@ -107,14 +130,19 @@ export default {
     },
     goPersonalSet() {
       uni.navigateTo({
-        url: "/pages/my/components/personalSet/index",
+        url: `/pages/my/components/personalSet/index?username=${this.username}&avater=${this.avater}`,
       });
     },
-    goPainting() {
-      uni.switchTab({
-        url: "/pages/Painting/index",
-      });
+    cancel() {
+      this.show = false;
     },
+    confirm(){
+      this.show = false
+      uni.navigateTo({
+        url: "/pages/login/index",
+      });
+      
+    }
   },
 };
 </script>

@@ -26,21 +26,6 @@
     <view class="infoThree">
       <text class="custom-style" @click="ChooseImageFace()">选择图片</text>
     </view>
-    <!-- <view class="dateBox">
-      <text style="font-size: 28rpx">{{ getday() }}更新了新特效</text>
-    </view> -->
-    <!-- <u-popup
-      :show="show"
-      mode="bottom"
-      @close="close"
-      @open="open"
-      :safeAreaInsetBottom="false"
-    >
-      <view class="popup-view">
-        <button class="popup-text" @click="ChooseImageFace(1)">我是男生</button>
-        <button class="popup-button" @click="ChooseImageFace(0)">我是女生</button>
-      </view>
-    </u-popup> -->
   </view>
 </template>
 
@@ -74,14 +59,6 @@ export default {
     getday() {
       return formatTime(new Date());
     },
-    // open() {
-    //   // console.log('open');
-    //   this.show = true;
-    // },
-    // close() {
-    //   this.show = false;
-    //   // console.log('close');
-    // },
     isTokenExpired(token) {},
     ChooseImageFace() {
       // uni.chooseImage({
@@ -124,7 +101,7 @@ export default {
           success: (res) => {
             if (res.confirm) {
               uni.navigateTo({
-                url: "/pages/login/components/Mobile/index",
+                url: "/pages/login/index",
               });
             }
           },

@@ -7,15 +7,12 @@
       />
       <view> 欢迎登录 </view>
       <view class="login-button">
-        <button
-          class="text-weixin"
-          open-type="getPhoneNumber"
-          @getphonenumber="decryptPhoneNumber"
-        >
+        <button class="text-weixin"  @click="getUserProfile">
           微信一键登录
         </button>
-
-        <text class="text-phone" @click="goMobile">账号登录</text>
+         <!-- <button class="text-weixin" open-type="getPhoneNumber" @getphonenumber="getUserProfile">
+          微信一键登录
+        </button> -->
       </view>
       <view class="logo_xieyi">
         <checkbox-group @change="changeValue">
@@ -30,21 +27,39 @@
   </view>
 </template>
 <script>
-import { getWxOauth2Login } from "@/api/user";
+import store from "@/store";
 export default {
   data() {
     return {
-      value: true,
+      code: "",
+      value: false,
       clearInterval: "",
       signature: "",
       rawData: {},
+      loadingLogin: false,
+      avatarUrl: "",
     };
   },
 
-  onLoad() {},
+  onLoad() {
+    uni.login({
+      provider: "weixin",
+      onlyAuthorize: true, // 微信登录仅请求授权认证
+      success: (res) => {
+        console.log("wxlogin", res);
+        this.code = res.code;
+      },
+      fail: (err) => {},
+    });
+  },
   methods: {
     changeRadio(item) {
       console.log(item);
+    },
+    onChooseAvatar(e) {
+      console.log(121, e);
+      const { avatarUrl } = e.detail;
+      this.avatarUrl = avatarUrl;
     },
     goMobile() {
       uni.navigateTo({
@@ -54,9 +69,75 @@ export default {
     },
     changeValue() {
       this.value = !this.value;
-    },  
+    },
+    async getUserProfile() {
+      uni.showLoading({
+        title: "加载中",
+      });
+      if (this.value) {
+        const code = this.code;
+        uni.getUserInfo({
+          lang: "zh_CN",
+          desc: "用于完善会员资料",
+          success(res) {
+            console.log(222, res);
+            // const avatarUrl = res.userInfo.avatarUrl
+            uni.request({
+              url: "/system/user/wxLogin",
+              method: "POST",
+              header: {
+                "content-type": "application/x-www-form-urlencoded",
+              },
+              data: {
+                code: code,
+                encryptedData: res.encryptedData,
+                invite: `1`,
+                iv: res.iv,
+              },
+              success(res) {
+                console.log(1212, res);
+                if (res.data.code == 200) {
+                  // console.log(JSON.parse(res.data.msg));
+                  store.commit("setToken", res.data.data);
+                  uni.switchTab({
+                    url: `/pages/index/index`,
+                  });
+                  uni.showToast({
+                    title: res.data.msg,
+                    duration: 2000,
+                  });
+                }
+              },
+            });
+          },
+          fail(err) {
+            console.log(222, err);
+            uni.showToast({
+              title: "登录失败",
+              duration: 2000,
+            });
+            uni.hideLoading();
+          },
+        });
+      } else {
+        uni.showToast({
+          title: "请同意服务条款",
+          icon: "none",
+        });
+      }
+    },
     async decryptPhoneNumber(e) {
       console.log(e);
+      uni.getUserProfile({
+        lang: "zh_CN",
+        desc: "用于完善会员资料",
+        success(user) {
+          console.log(121, user);
+        },
+        fail(err) {
+          console.log(212, err);
+        },
+      });
       //  const res = await getWxOauth2Login({code: e.detail.code,})
       //  console.log(res);
       // uni.request({

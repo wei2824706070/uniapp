@@ -4,13 +4,41 @@
   },
   "pages": [
      {
+      "path": "pages/index/index"
+    },
+    
+     {
       "path": "pages/login/index"
     },
      {
-      "path": "pages/index/index"
-      
+      "path": "pages/my/components/personalSet/index",
+      "style": {
+        "navigationBarTitleText": "个人设置"
+      }
+    },
+    
+   
+    
+     {
+      "path": "pages/preview/index"
     },
    
+     {
+      "path": "pages/login/components/Mobile/index",
+      "style": {
+				"navigationBarTitleText": "登录"
+			}
+    },
+    
+  
+ {
+      "path": "pages/my/components/changePassword/index",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+     
+    
      {
       "path": "pages/my/my",
       "style": {
@@ -18,78 +46,11 @@
       }
     },
      
-      {
-      "path": "pages/preview/index"
-    },
-  
-    {
-      "path": "pages/Painting/draftDetails",
-      "style": {
-        "navigationBarTitleText": "草稿详情"
-      }
-    },
-    
-   
-    {
-      "path": "pages/login/components/Mobile/index",
-      "style": {
-				"navigationBarTitleText": "登录"
-			
-			}
-    },
-  
     {
       "path": "pages/login/components/register/index",
       "style": {
         "navigationBarTitleText": "新用户注册"
       }
-    },
-    {
-      "path": "pages/squareDetails/index",
-      "style": {
-        "navigationBarTitleText": "广场详情"
-      }
-    },
-    {
-      "path": "pages/works/index",
-      "style": {
-        "navigationBarTitleText": "作品详情"
-      }
-    },
-    {
-      "path": "pages/my/components/personalSet/index",
-      "style": {
-        "navigationBarTitleText": "个人设置"
-      }
-    },
-   
-    {
-      "path": "pages/my/components/changePassword/index",
-      "style": {
-        "navigationBarTitleText": "修改密码"
-      }
-    },
-    {
-      "path": "pages/Painting/index",
-      "style": {
-        "navigationBarTitleText": "画集"
-      }
-    },
-   
-    {
-      "path": "pages/squareRelease/index",
-      "style": {
-        "navigationBarTitleText": "发布"
-      }
-    },
-    {
-      "path": "pages/square/index",
-      "style": {
-        "navigationBarTitleText": "广场"
-      }
-    },
-    {
-      "path": "pages/loading/index"
     },
    
     {

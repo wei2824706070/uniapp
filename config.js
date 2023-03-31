@@ -1,8 +1,8 @@
 module.exports = {
   // 请求域名 格式： https://您的域名
   HTTP_URL:'',// 以下配置非开发者，无需修改
-  HTTP_REQUEST_URL:'http://192.168.51.205:8081',// 以下配置非开发者，无需修改
-  // HTTP_REQUEST_URL:'https://ai.changqiu.cc',// 以下配置非开发者，无需修改
+  // HTTP_REQUEST_URL:'http://192.168.51.205:8081',// 以下配置非开发者，无需修改
+  HTTP_REQUEST_URL:'https://ai.changqiu.cc',// 以下配置非开发者，无需修改
   // 请求头
   HEADER:{
     'content-type': 'application/x-www-form-urlencoded'

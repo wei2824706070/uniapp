@@ -57,3 +57,17 @@ export const getWxOauth2Login = (data) => {
     data
   })
 }
+export const updateWxUserAvatar = (data) => {
+  return request({
+    url:  '/system/user/updateWxUserAvatar',
+    method: 'post',
+    data
+  })
+}
+export const updateWxUserProfile = (data) => {
+  return request({
+    url:  '/system/user/updateWxUserProfile',
+    method: 'post',
+    data
+  })
+}
