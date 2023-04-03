@@ -1,8 +1,26 @@
 <template>
   <view class="preview">
     <view class="preview-swiper">
-      <image class="preview-image" :src="largeUrl" mode="aspectFill" />
-
+      <image
+        v-if="!showHeight"
+        :src="largeUrl"
+        mode="widthFix"
+        :class="{ active: value === index }"
+        style="width: 650rpx; padding: 70rpx 0; border-radius: 10rpx"
+        lazy-load
+        :show-menu-by-longpress="true"
+        @load="loadImage"
+      />
+      <image
+        v-else
+        :src="largeUrl"
+        mode="heightFix"
+        :class="{ active: value === index }"
+        style="height: 900rpx; padding: 70rpx 0; border-radius: 10rpx"
+        lazy-load
+        :show-menu-by-longpress="true"
+        @load="loadImage"
+      />
       <swiper class="preview-header" :display-multiple-items="itemsIndex">
         <swiper-item v-for="(item, index) in categoryList" :key="index">
           <view class="swiper-item" @click="getTagslist(index)">
@@ -12,6 +30,7 @@
               :class="{ active: value === index }"
               style="width: 130rpx; height: 130rpx; border-radius: 10rpx"
             />
+
             <text>{{ item.name }}</text>
           </view>
         </swiper-item>
@@ -37,8 +56,8 @@ export default {
       alreadyList: [],
       itemsIndex: "",
       currentIndex: "",
-      largeUrl:
-        "https://hbimg.b0.upaiyun.com/bd295b738c9cf801d4e88b419a91355087850a4f76f9-25Zauq_fw658",
+      largeUrl: "",
+      imageUrl: "",
       algoType: "",
       value: 0,
       current: 0,
@@ -47,20 +66,26 @@ export default {
       releaseUrl: "",
       loadingImage: false,
       baseShow: false,
+      showHeight: false,
+      changeHeight: false,
+      loading: false,
     };
   },
 
   async onLoad({ url }) {
     this.baseUrl = url;
-    console.log(444, this.baseUrl);
     this.getTagsCategory();
-    wx.showShareMenu({
-      withShareTicket: true,
-      //设置下方的Menus菜单，才能够让发送给朋友与分享到朋友圈两个按钮可以点击
-      menus: ["shareAppMessage", "shareTimeline"],
-    });
   },
   methods: {
+    loadImage(e) {
+      console.log(e);
+      if (e.detail.height < 900) {
+        this.showHeight = false;
+      } else {
+        this.showHeight = true;
+      }
+      uni.hideLoading();
+    },
     async getTagslist(index = 0) {
       this.value = index;
       this.algoType = this.categoryList[index].label;
@@ -68,19 +93,14 @@ export default {
         return item.value == this.value;
       });
 
-      console.log(222, already);
+      // console.log(222, already);
       if (already.length > 0) {
         this.largeUrl = already[0].url;
         return;
       }
-      this.largeUrl =
-        "https://hbimg.b0.upaiyun.com/bd295b738c9cf801d4e88b419a91355087850a4f76f9-25Zauq_fw658";
-
-      // if (!this.baseShow) {
-      //   this.baseUrl = await pathToBase64(this.baseUrl);
-      // }
-      // this.baseShow = true;
-
+      uni.showLoading({
+        title: "加载中...",
+      });
       uni.uploadFile({
         url: "/home/pic/generate",
         filePath: this.baseUrl,
@@ -90,12 +110,13 @@ export default {
         },
         success: async (uploadFileRes) => {
           let res = JSON.parse(uploadFileRes.data);
-          console.log(11122, res, uploadFileRes);
+          // console.log(11122, res, uploadFileRes);
           if (res.code == 200) {
             this.largeUrl = "https://ai.changqiu.cc" + res.data.image;
+            this.loading = false;
             const obj = { value: this.value, url: this.largeUrl };
             this.alreadyList.push(obj);
-            console.log(111, obj, this.alreadyList);
+            // console.log(111, obj, this.alreadyList);
           } else if (res.code == 401) {
             this.$store.commit("longout");
             uni.showToast({
@@ -108,15 +129,30 @@ export default {
                 url: "/pages/login/index",
               });
             }, 1200);
-          } else {
-            uni.showToast({
-              title: "图像中没找到人脸,请重新选择图片",
-              icon: "none",
-              duration: 4000,
-            });
-            setTimeout(() => {
-              this.ChooseImageFace();
-            }, 1500);
+          } else if (res.code == 500) {
+            if (res.msg == "积分不足") {
+              uni.hideLoading();
+              setTimeout(() => {
+                uni.showToast({
+                title: res.msg,
+                icon: "none",
+                duration: 4000,
+              });
+              }, 100);
+            } else {
+              uni.hideLoading();
+              setTimeout(() => {
+                uni.showToast({
+                  title: "图像中没找到人脸,请重新选择",
+                  icon: "none",
+                  duration: 4000,
+                });
+              }, 100);
+
+              setTimeout(() => {
+                this.ChooseImageFace();
+              }, 1500);
+            }
           }
         },
       });
@@ -129,7 +165,7 @@ export default {
         item.name = list[index];
         return item;
       });
-      console.log(111, res, this.categoryList);
+      // console.log(111, res, this.categoryList);
       this.algoType = this.categoryList[0].label;
       if (this.categoryList.length > 5) {
         this.itemsIndex = 5;
@@ -148,9 +184,10 @@ export default {
         sourceType: ["album", "camera"], //从相册选择（也可以拍照
         success: async (res) => {
           this.faceSrc = res.tempFilePaths[0];
-          console.log(111, this.faceSrc);
+          // console.log(111, this.faceSrc);
           this.baseUrl = this.faceSrc;
           this.alreadyList = [];
+          this.largeUrl = "";
           await this.getTagslist();
         },
       });
@@ -185,25 +222,6 @@ export default {
         },
       });
     },
-    handleShare() {
-      uni.share({
-        provider: "weixin",
-        scene: "WXSceneSession", // 分享到微信好友
-        type: 2,
-        imageUrl: this.largeUrl,
-        success: function () {},
-        fail: function () {},
-      });
-      // uni.showShareMenu({
-      //   withShareTicket: true,
-      //   success: function (res) {
-      //     console.log("显示分享菜单成功");
-      //   },
-      //   fail: function (res) {
-      //     console.log("显示分享菜单失败");
-      //   },
-      // });
-    },
   },
 };
 </script>
@@ -223,6 +241,9 @@ export default {
     flex-direction: column;
     align-items: center;
     position: relative;
+    .u-image {
+      text-align: center;
+    }
     .preview-image {
       width: 650rpx;
       // height: 600rpx;

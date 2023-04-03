@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="textInfo">
-      <text class="infoOne">是时候多次实现你的卡通梦想了。</text>
+      <text class="infoOne">是时候实现你的动漫梦想了。</text>
       <view class="infoTwe">只需将你的照片交给AI就行了</view>
     </view>
     <view class="banner">
@@ -42,10 +42,12 @@ export default {
       interval: 2000,
       duration: 500,
       show: false,
+      showlogin:'',
     };
   },
   onLoad() {
     this.SwiperList();
+    
   },
   methods: {
     async SwiperList() {
@@ -80,18 +82,18 @@ export default {
       // });
 
       if (this.$store.state.token) {
-          uni.chooseImage({
-            count: 1, //默认9
-            sizeType: ["original", "compressed"],
-            sourceType: ["album", "camera"],
-            success: function (res) {
-              let imgUrl = res.tempFilePaths[0];
-              console.log(imgUrl);
-              uni.navigateTo({
-                url: `/pages/preview/index?url=${imgUrl}`,
-              });
-            },
-          });
+        uni.chooseImage({
+          count: 1, //默认9
+          sizeType: ["original", "compressed"],
+          sourceType: ["album", "camera"],
+          success: function (res) {
+            let imgUrl = res.tempFilePaths[0];
+            console.log(imgUrl);
+            uni.navigateTo({
+              url: `/pages/preview/index?url=${imgUrl}`,
+            });
+          },
+        });
       } else {
         uni.showModal({
           title: "提示",

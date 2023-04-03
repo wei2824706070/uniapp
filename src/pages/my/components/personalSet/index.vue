@@ -77,11 +77,9 @@
       @cancel="cancel"
       @close="cancel"
     >
-    <u--input
-    
-    v-model="nickName"
-  ></u--input>
+      <u--input v-model="nickName"></u--input>
       <!-- <input
+        type="nickname"
         placeholder="请输入昵称"
         class="modal-input"
         v-model="nickName"
@@ -103,29 +101,39 @@ export default {
   onShow() {
     this.getWxUserInfo();
   },
-  onLoad({username,avater}) {
+  onLoad({ username, avater }) {
     // this.username = username;
     // this.avater = avater;
   },
+  // onNavigationBarButtonTap(e) {
+  //   if (e.position === "left") {
+  //     this.onBackPress();
+  //   }
+  // },
   methods: {
+    onBackPress() {
+      // console.log("返回箭头被点击了");
+    },
     async logOut() {
       const res = await getLogout();
       if (res.code) {
         this.$store.commit("longout");
-        uni.removeStorageSync('username-avater')
+        // uni.removeStorageSync('username-avater')
+
         uni.showToast({
           title: res.msg,
-          icon: "none",
         });
-        uni.navigateTo({
-          url: "/pages/login/index",
-        });
+        setTimeout(() => {
+          uni.switchTab({
+            url: `/pages/index/index`,
+          });
+        }, 800);
       }
-      console.log(res);
+      // console.log(res);
     },
     async getWxUserInfo() {
       const res = await getWxUserInfo();
-      console.log(3232, res);
+      // console.log(3232, res);
       if (res.code == 200) {
         this.showlogin = false;
         this.avater = "https://ai.changqiu.cc" + res.data.avatar;
@@ -136,7 +144,6 @@ export default {
         this.avater =
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7";
       }
-      
     },
     async onChooseAvatar(e) {
       const { avatarUrl } = e.detail;
@@ -146,7 +153,7 @@ export default {
         name: "file",
         success: async (uploadFileRes) => {
           let res = JSON.parse(uploadFileRes.data);
-          console.log(212, res);
+          // console.log(212, res);
           if (res.code === 200) {
             this.getWxUserInfo();
           }
@@ -157,31 +164,27 @@ export default {
             duration: 2000,
           });
         },
-        complete: () => {
-          uni.hideLoading();
-        },
       });
     },
     async confirm() {
       if (this.nickName) {
         const res = await updateWxUserProfile({ nickName: this.nickName });
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.getWxUserInfo();
           this.show = false;
-          this.nickName = ''
+          this.nickName = "";
         }
-      }
-      else{
+      } else {
         uni.showToast({
-            title: '请输入昵称',
-            icon:'none',
-          });
+          title: "请输入昵称",
+          icon: "none",
+        });
       }
     },
     cancel() {
       this.show = false;
-      this.nickName = ''
+      this.nickName = "";
     },
   },
 };
@@ -231,7 +234,6 @@ export default {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    
   }
 }
 .my-modal {

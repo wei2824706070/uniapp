@@ -7,10 +7,14 @@
       />
       <view> 欢迎登录 </view>
       <view class="login-button">
-        <button class="text-weixin"  @click="getUserProfile">
+        <button
+          class="text-weixin"
+          :disabled="disabledLogin"
+          @click="getUserProfile"
+        >
           微信一键登录
         </button>
-         <!-- <button class="text-weixin" open-type="getPhoneNumber" @getphonenumber="getUserProfile">
+        <!-- <button class="text-weixin" open-type="getPhoneNumber" @getphonenumber="getUserProfile">
           微信一键登录
         </button> -->
       </view>
@@ -38,10 +42,12 @@ export default {
       rawData: {},
       loadingLogin: false,
       avatarUrl: "",
+      disabledLogin: false,
+      invite: "",
     };
   },
 
-  onLoad() {
+  onLoad({ id }) {
     uni.login({
       provider: "weixin",
       onlyAuthorize: true, // 微信登录仅请求授权认证
@@ -51,6 +57,10 @@ export default {
       },
       fail: (err) => {},
     });
+    console.log(11, id);
+    if (id) {
+      this.invite = id;
+    }
   },
   methods: {
     changeRadio(item) {
@@ -76,6 +86,7 @@ export default {
       });
       if (this.value) {
         const code = this.code;
+        const invite = this.invite;
         uni.getUserInfo({
           lang: "zh_CN",
           desc: "用于完善会员资料",
@@ -91,7 +102,7 @@ export default {
               data: {
                 code: code,
                 encryptedData: res.encryptedData,
-                invite: `1`,
+                invite: invite,
                 iv: res.iv,
               },
               success(res) {
@@ -102,21 +113,25 @@ export default {
                   uni.switchTab({
                     url: `/pages/index/index`,
                   });
-                  uni.showToast({
-                    title: res.data.msg,
-                    duration: 2000,
-                  });
+                  setTimeout(() => {
+                    uni.showToast({
+                      title: res.data.msg,
+                      duration: 1000,
+                    });
+                  }, 100);
                 }
               },
             });
           },
           fail(err) {
             console.log(222, err);
-            uni.showToast({
-              title: "登录失败",
-              duration: 2000,
-            });
             uni.hideLoading();
+            setTimeout(() => {
+              uni.showToast({
+                title: "登录失败",
+                duration: 2000,
+              });
+            }, 100);
           },
         });
       } else {
