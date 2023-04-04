@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     loadImage(e) {
-      console.log(e);
+      // console.log(e);
       if (e.detail.height < 900) {
         this.showHeight = false;
       } else {

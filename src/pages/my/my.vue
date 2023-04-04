@@ -7,9 +7,8 @@
       </view>
       <view v-else class="my-yh">
         <text> {{ username }} </text>
-        <!-- <view> 积分:{{ integral }} </view> -->
-        <view> 积分:0 </view>
-
+        <view> 积分:{{ integral }} </view>
+        <!-- <view> 积分:0 </view> -->
       </view>
       <view v-if="!showlogin" class="my-center" @click="goPersonalSet">
         <u-icon
@@ -94,14 +93,14 @@ export default {
     };
   },
   onShow() {
-    if(this.token){
+    if (this.token) {
       this.getWxUserInfo();
-    }else{
+    } else {
       this.showSignIn = false;
-        this.showlogin = true;
-        this.avater =
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7";
-    } 
+      this.showlogin = true;
+      this.avater =
+        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Faf588ebb-8bba-4d96-8816-37f8db6b6ab5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680684862&t=aa98df6f31047e6484e37f4c8c3b7fd7";
+    }
   },
   onHide() {
     // this.showlogin = true;
@@ -110,12 +109,11 @@ export default {
     // this.getWxUserInfo();
   },
   onShareAppMessage(res) {
-      return {
-        title: "邀请好友",
-        path: `/pages/login/index?id=${this.userId}`,
-      };
-  
-     
+    return {
+      title: "邀请好友",
+      path: `/pages/login/index?id=${this.userId}`,
+    };
+
     // console.log(11,res);
   },
   onLoad() {
@@ -149,16 +147,25 @@ export default {
       // }
     },
     async getSignIn() {
-      const res = await getSignIn();
-      // console.log(res);
-      if (res.msg == "签到成功") {
-        this.getWxUserInfo();
-      } else {
-        // this.show = true
-        uni.showToast({
-          title: "你还未登录，请先登录",
-          icon: "none",
+      if (!this.token) {
+        uni.showModal({
+          title: "提示",
+          content: "您还未登录，请先登录",
+          success: (res) => {
+            if (res.confirm) {
+              // 用户点击确定按钮，跳转到登录页面
+              uni.navigateTo({
+                url: "/pages/login/index",
+              });
+            }
+          },
         });
+      } else {
+        const res = await getSignIn();
+        console.log(res);
+        if (res.msg == "签到成功") {
+          this.getWxUserInfo();
+        }
       }
     },
     gologin() {
@@ -171,20 +178,25 @@ export default {
         url: `/pages/my/components/personalSet/index?username=${this.username}&avater=${this.avater}`,
       });
     },
-    cancel() {
-      this.show = false;
-    },
-    confirm() {
-      this.show = false;
-      uni.navigateTo({
-        url: "/pages/login/index",
-      });
-    },
     handleShare() {
-      uni.showToast({
-        title: "你还未登录，请先登录",
-        icon: "none",
-      });
+      // uni.showToast({
+      //   title: "你还未登录，请先登录",
+      //   icon: "none",
+      // });
+      if (!this.token) {
+        uni.showModal({
+          title: "提示",
+          content: "您还未登录，请先登录",
+          success: (res) => {
+            if (res.confirm) {
+              // 用户点击确定按钮，跳转到登录页面
+              uni.navigateTo({
+                url: "/pages/login/index",
+              });
+            }
+          },
+        });
+      }
     },
   },
 };
