@@ -11,12 +11,12 @@
         :show-menu-by-longpress="true"
         @load="loadImage"
       />
-      <image
+      <image 
         v-else
         :src="largeUrl"
         mode="heightFix"
         :class="{ active: value === index }"
-        style="height: 900rpx; padding: 70rpx 0; border-radius: 10rpx"
+        style="height: 60vh; padding: 50rpx 0; border-radius: 10rpx"
         lazy-load
         :show-menu-by-longpress="true"
         @load="loadImage"
@@ -31,7 +31,7 @@
               style="width: 130rpx; height: 130rpx; border-radius: 10rpx"
             />
 
-            <text>{{ item.name }}</text>
+            <text class="swiper-text">{{ item.name }}</text>
           </view>
         </swiper-item>
       </swiper>
@@ -228,7 +228,7 @@ export default {
 
 <style scoped lang="scss">
 .preview {
-  height: 98vh;
+  height: 95vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -254,7 +254,10 @@ export default {
       width: 100%;
       height: 200rpx;
       text-align: center;
-      margin-bottom: 50rpx;
+      margin-bottom: 20rpx;
+      .swiper-text{
+        font-size: 4vw;
+      }
     }
   }
   .u-demo-block {
@@ -296,6 +299,7 @@ export default {
 
 .swiper-item {
   transform: scale(0.8);
+ 
 }
 .active {
   border: 2px solid rgba(58, 162, 255, 1);

@@ -42,12 +42,11 @@ export default {
       interval: 2000,
       duration: 500,
       show: false,
-      showlogin:'',
+      showlogin: "",
     };
   },
   onLoad() {
     this.SwiperList();
-    
   },
   methods: {
     async SwiperList() {
@@ -115,17 +114,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.preview-footer {
-  width: 550rpx;
-  height: 850rpx;
-  border-radius: 40rpx;
-  .swiper-item {
-    width: 550rpx;
-    height: 850rpx;
-    border-radius: 40rpx;
-  }
-}
-
 .container {
   display: flex;
   justify-content: center;
@@ -135,8 +123,18 @@ export default {
 
   .banner {
     // margin: 24rpx 0;
-    width: 560rpx;
+    width: 70vw;
     border-radius: 40rpx;
+    .preview-footer {
+      width: 70vw;
+      height: 60vh;
+      border-radius: 40rpx;
+      .swiper-item {
+        width: 70vw;
+        height: 60vh;
+        border-radius: 40rpx;
+      }
+    }
   }
   .textInfo {
     text-align: center;
