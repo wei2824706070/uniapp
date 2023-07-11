@@ -40,12 +40,6 @@
     },
     
   
- {
-      "path": "pages/my/components/changePassword/index",
-      "style": {
-        "navigationBarTitleText": "修改密码"
-      }
-    },
      
 
      
