@@ -146,6 +146,7 @@ export default {
       }
     },
     async onChooseAvatar(e) {
+      
       const { avatarUrl } = e.detail;
       uni.uploadFile({
         url: "/system/user/updateWxUserAvatar",
